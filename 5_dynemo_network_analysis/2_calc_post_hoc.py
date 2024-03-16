@@ -10,11 +10,11 @@ from osl_dynamics import run_pipeline
 def get_best_run():
     best_fe = np.Inf
     for run in range(1, 11):
-        history = pickle.load(open(f"data/hmm/run{run:02d}/model/history.pkl", "rb"))
+        history = pickle.load(open(f"data/dynemo/run{run:02d}/model/history.pkl", "rb"))
         if history["free_energy"] < best_fe:
             best_run = run
             best_fe = history["free_energy"]
-    print("Best run:" best_run)
+    print("Best run:", best_run)
     return best_run
 
 config = """
@@ -29,17 +29,15 @@ config = """
             tde_pca: {n_embeddings: 15, n_pca_components: 80}
             standardize: {}
     get_inf_params: {}
-    multitaper_spectra:
+    regression_spectra:
         kwargs:
             frequency_range: [1, 45]
             n_jobs: 8
-        nnmf_components: 2
-    plot_group_nnmf_tde_hmm_networks:
-        nnmf_file: spectra/nnmf_2.npy
+    plot_group_tde_dynemo_networks:
         power_save_kwargs:
-            plot_kwargs: {views: [lateral], symmetric_cbar: True}
+            plot_kwargs: {views: [lateral]}
 """
 
 run = get_best_run()
 
-run_pipeline(config, output_dir=f"data/hmm/run{run:02d}")
+run_pipeline(config, output_dir=f"data/dynemo/run{run:02d}")
