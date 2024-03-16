@@ -23,11 +23,13 @@ os.makedirs("data/sensor_analysis/group_level", exist_ok=True)
 for contrast in range(4):
 
     # Total power response
-    total = np.array([np.load(file) for file in sorted(glob(f"data/sensor_analysis/first_level/total_*_contrast_{contrast}.npy"))])
+    first_level_files = sorted(glob(f"data/sensor_analysis/first_level/total_*_contrast_{contrast}.npy"))
+    total = np.array([np.load(file) for file in first_level_files])
     do_stats(total, "total", contrast)
 
     # Evoked response
-    evoked = np.array([np.load(file) for file in sorted(glob(f"data/sensor_analysis/first_level/evoked_*_contrast_{contrast}.npy"))])
+    first_level_files = sorted(glob(f"data/sensor_analysis/first_level/evoked_*_contrast_{contrast}.npy"))
+    evoked = np.array([np.load(file) for file in first_level_files])
     do_stats(evoked, "evoked", contrast)
 
     # Induced response
