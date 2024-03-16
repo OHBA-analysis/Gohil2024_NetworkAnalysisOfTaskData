@@ -29,11 +29,11 @@ def save_contrasts(name, famous, unfamiliar, scrambled, button):
         button,
     ]
     for i, contrast in enumerate(contrasts):
-        filename = f"data/first_level/{name}_contrast_{i}.npy"
+        filename = f"data/sensor_analysis/first_level/{name}_contrast_{i}.npy"
         np.save(filename, contrast)
 
-os.makedirs("data/first_level", exist_ok=True)
-for file in sorted(glob("data/epochs/*-epo.fif")):
+os.makedirs("data/sensor_analysis/first_level", exist_ok=True)
+for file in sorted(glob("data/sensor_analysis/epochs/*-epo.fif")):
     id = file.split("/")[-1].split("-")[0]
     print(id)
 
@@ -61,5 +61,5 @@ for file in sorted(glob("data/epochs/*-epo.fif")):
     save_contrasts("evoked_" + id, famous, unfamiliar, scrambled, button)
 
 # Save time and frequency axis
-np.save("data/first_level/t.npy", epochs.times[::3])  # need to account for decim=3
-np.save("data/first_level/f.npy", np.arange(6, 30, 0.5))
+np.save("data/sensor_analysis/first_level/t.npy", epochs.times[::3])  # need to account for decim=3
+np.save("data/sensor_analysis/first_level/f.npy", np.arange(6, 30, 0.5))

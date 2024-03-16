@@ -1,4 +1,4 @@
-Conventional Time-Frequency Analysis (Sensor-Level)
+Conventional Time-Frequency Analysis (Sensor Level)
 ---------------------------------------------------
 
 Scripts:

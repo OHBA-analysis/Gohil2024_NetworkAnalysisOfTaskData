@@ -19,9 +19,7 @@ def find_events(raw):
         ],
     }
     events = mne.find_events(raw, min_duration=0.005, verbose=False)
-    for old_event_codes, new_event_codes in zip(
-        old_event_ids.values(), new_event_ids.values()
-    ):
+    for old_event_codes, new_event_codes in zip(old_event_ids.values(), new_event_ids.values()):
         events = mne.merge_events(events, old_event_codes, new_event_codes)
     return events, new_event_ids
 
@@ -30,15 +28,12 @@ def standardize(data):
     data /= np.std(data, axis=-1, keepdims=True)
     return data
 
-os.makedirs("data/epochs", exist_ok=True)
+os.makedirs("data/sensor_analysis/epochs", exist_ok=True)
 files = []
 for sub in range(1, 20):
     for run in range(1, 7):
         # Load preprocessed data
-        file = (
-            "/well/woolrich/projects/wakeman_henson/spring23/preproc"
-            "/sub{sub:02d}/run_{run:02d}_sss/run_{run:02d}_sss_preproc_raw.fif"
-        ).format(sub=sub, run=run)
+        file = "data/preproc/sub{sub:02d}/run_{run:02d}_sss/run_{run:02d}_sss_preproc_raw.fif".format(sub=sub, run=run)
         raw = mne.io.read_raw_fif(file, preload=True)
 
         # Standardise
@@ -49,5 +44,5 @@ for sub in range(1, 20):
 
         # Epoch and save
         epochs = mne.Epochs(raw, events, event_ids, tmin=-0.1, tmax=1)
-        filename = "data/epochs/sub{0:02d}_run{1:02d}-epo.fif".format(sub, run)
+        filename = "data/sensor_analysis/epochs/sub{0:02d}_run{1:02d}-epo.fif".format(sub, run)
         epochs.save(filename, overwrite=True)
