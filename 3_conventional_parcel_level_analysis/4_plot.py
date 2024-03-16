@@ -2,25 +2,23 @@
 
 """
 
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-plot_parcels = False
-plot_sig_parcels = False
-plot_visual = True
-plot_faces_vs_scrambled = False
-plot_famous_vs_unfamiliar = False
-plot_button = False
+from osl_dynamics.analysis import power
 
-t = np.load("data/first_level/t.npy")
-f = np.load("data/first_level/f.npy")
+os.makedirs("plots", exist_ok=True)
+
+t = np.load("data/parcel_analysis/first_level/t.npy")
+f = np.load("data/parcel_analysis/first_level/f.npy")
 
 def load(contrast, parcel="all", name="total"):
     if parcel == "all":
         parcel = range(38)
-    tfr = np.load(f"data/group_level/{name}_contrast_{contrast}.npy")
-    pvalues = np.load(f"data/group_level/{name}_contrast_{contrast}_pvalues.npy")
+    tfr = np.load(f"data/parcel_analysis/group_level/{name}_contrast_{contrast}.npy")
+    pvalues = np.load(f"data/parcel_analysis/group_level/{name}_contrast_{contrast}_pvalues.npy")
     return np.squeeze(tfr[parcel]), np.squeeze(pvalues[parcel])
 
 def plot_tfr(data, pvalues, filename):
@@ -62,12 +60,42 @@ def plot_tfr(data, pvalues, filename):
     plt.savefig(filename)
     plt.close()
 
-if plot_parcels:
-    from osl_dynamics.analysis import power
+#%% Plot parcel locations
 
-    for parcel in [9, 25]:
-        vector = np.zeros(38)
-        vector[parcel] = 1
+# Highlight the location of particular parcels
+for parcel in [9, 25]:
+    vector = np.zeros(38)
+    vector[parcel] = 1
+    power.save(
+        vector,
+        mask_file="MNI152_T1_8mm_brain.nii.gz",
+        parcellation_file="fmri_d100_parcellation_with_PCC_reduced_2mm_ss5mm_ds8mm.nii.gz",
+        plot_kwargs={
+            "views": ["lateral"],
+            "colorbar": False,
+            "symmetric_cbar": True,
+            "cmap": "RdBu_r",
+            "bg_on_data": 1,
+            "darkness": 1,
+            "alpha": 1,
+        },
+        filename=f"plots/parcel_{parcel}_.png",
+    )
+
+# Plot p-value of each parcel for the different contrasts
+for contrast in range(4):
+
+    # What parcels have at least one time point with p-values < 0.05
+    _, pvalues = load(contrast, name="total")
+    sig_parcels = np.any(pvalues < 0.05, axis=(-1, -2))
+    sig_parcels_indices = sig_parcels.nonzero()[0]
+
+    if not any(sig_parcels):
+        print(f"no significant parcels for contrast {contrast}")
+    else:
+        print(f"significant parcels for contrast {contrast}: {sig_parcels_indices}")
+        vector = np.zeros(pvalues.shape[0])
+        vector[sig_parcels] = 1
         power.save(
             vector,
             mask_file="MNI152_T1_8mm_brain.nii.gz",
@@ -75,105 +103,79 @@ if plot_parcels:
             plot_kwargs={
                 "views": ["lateral"],
                 "colorbar": False,
+                "symmetric_cbar": True,
                 "cmap": "RdBu_r",
                 "bg_on_data": 1,
-                "darkness": 0.6,
+                "darkness": 1,
                 "alpha": 1,
             },
-            filename=f"plots/parcel_{parcel}_.png",
+            filename=f"plots/sig_parcels_contrast_{contrast}_.png",
         )
 
-if plot_sig_parcels:
-    from osl_dynamics.analysis import power
+#%% Plot visual (all) response
 
-    # Contrasts:
-    # - 0 = ButtonPress
-    # - 1 = Visual
-    # - 2 = Faces_vs_Scrambled
-    # - 3 = Famous_vs_Unfamiliar
-    for contrast in range(4):
-        # What parcels have at least one time point with p-values < 0.05
-        _, pvalues = load(contrast, name="total")
-        sig_parcels = np.any(pvalues < 0.05, axis=(-1, -2))
+contrast = 0
+parcel = 25
 
-        if not any(sig_parcels):
-            print(f"no significant parcels for contrast {contrast}")
-        else:
-            p = -np.ones(pvalues.shape[0])
-            p[sig_parcels] = -0.1
-            #if contrast == 0:
-            #    p[4] = 1
-            #else:
-            #    p[0] = 1
-            power.save(
-                p,
-                mask_file="MNI152_T1_8mm_brain.nii.gz",
-                parcellation_file="fmri_d100_parcellation_with_PCC_reduced_2mm_ss5mm_ds8mm.nii.gz",
-                plot_kwargs={"views": ["lateral"], "colorbar": False, "cmap": "hot"},
-                filename=f"plots/sig_parcels_contrast_{contrast}_.png",
-            )
+# Total power response
+visual, p_visual = load(contrast, parcel, name="total")
+plot_tfr(visual, p_visual, "plots/visual_total.png")
 
-if plot_visual:
-    contrast = 0
-    parcel = 25
+# Evoked response
+visual, p_visual = load(contrast, parcel, name="evoked")
+plot_tfr(visual, p_visual, "plots/visual_evoked.png")
 
-    # Total power response
-    visual, p_visual = load(contrast, parcel, name="total")
-    plot_tfr(visual, p_visual, "plots/visual_total.png")
+# Induced response
+visual, p_visual = load(contrast, parcel, name="induced")
+plot_tfr(visual, p_visual, "plots/visual_induced.png")
 
-    # Evoked response
-    visual, p_visual = load(contrast, parcel, name="evoked")
-    plot_tfr(visual, p_visual, "plots/visual_evoked.png")
+#%% Plot faces vs scrambled response
 
-    # Induced response
-    visual, p_visual = load(contrast, parcel, name="induced")
-    plot_tfr(visual, p_visual, "plots/visual_induced.png")
+contrast = 1
+parcel = 25
 
-if plot_faces_vs_scrambled:
-    contrast = 1
-    parcel = 25
+# Total power response
+faces_vs_scrambled, p_faces_vs_scrambled = load(contrast, parcel, name="total")
+plot_tfr(faces_vs_scrambled, p_faces_vs_scrambled, "plots/faces_vs_scrambled_total.png")
 
-    # Total power response
-    faces_vs_scrambled, p_faces_vs_scrambled = load(contrast, parcel, name="total")
-    plot_tfr(faces_vs_scrambled, p_faces_vs_scrambled, "plots/faces_vs_scrambled_total.png")
+# Evoked response
+faces_vs_scrambled, p_faces_vs_scrambled = load(contrast, parcel, name="evoked")
+plot_tfr(faces_vs_scrambled, p_faces_vs_scrambled, "plots/faces_vs_scrambled_evoked.png")
 
-    # Evoked response
-    faces_vs_scrambled, p_faces_vs_scrambled = load(contrast, parcel, name="evoked")
-    plot_tfr(faces_vs_scrambled, p_faces_vs_scrambled, "plots/faces_vs_scrambled_evoked.png")
+# Induced response
+faces_vs_scrambled, p_faces_vs_scrambled = load(contrast, parcel, name="induced")
+plot_tfr(faces_vs_scrambled, p_faces_vs_scrambled, "plots/faces_vs_scrambled_induced.png")
 
-    # Induced response
-    faces_vs_scrambled, p_faces_vs_scrambled = load(contrast, parcel, name="induced")
-    plot_tfr(faces_vs_scrambled, p_faces_vs_scrambled, "plots/faces_vs_scrambled_induced.png")
+#%% Plot famous vs unfamiliar response
 
-if plot_famous_vs_unfamiliar:
-    contrast = 2
-    parcel = 25
+contrast = 2
+parcel = 25
 
-    # Total power response
-    famous_vs_unfamiliar, p_famous_vs_unfamiliar = load(contrast, parcel, name="total")
-    plot_tfr(famous_vs_unfamiliar, p_famous_vs_unfamiliar, "plots/famous_vs_unfamiliar_total.png")
+# Total power response
+famous_vs_unfamiliar, p_famous_vs_unfamiliar = load(contrast, parcel, name="total")
+plot_tfr(famous_vs_unfamiliar, p_famous_vs_unfamiliar, "plots/famous_vs_unfamiliar_total.png")
 
-    # Evoked response
-    famous_vs_unfamiliar, p_famous_vs_unfamiliar = load(contrast, parcel, name="evoked")
-    plot_tfr(famous_vs_unfamiliar, p_famous_vs_unfamiliar, "plots/famous_vs_unfamiliar_evoked.png")
+# Evoked response
+famous_vs_unfamiliar, p_famous_vs_unfamiliar = load(contrast, parcel, name="evoked")
+plot_tfr(famous_vs_unfamiliar, p_famous_vs_unfamiliar, "plots/famous_vs_unfamiliar_evoked.png")
 
-    # Induced response
-    famous_vs_unfamiliar, p_famous_vs_unfamiliar = load(contrast, parcel, name="induced")
-    plot_tfr(famous_vs_unfamiliar, p_famous_vs_unfamiliar, "plots/famous_vs_unfamiliar_induced.png")
+# Induced response
+famous_vs_unfamiliar, p_famous_vs_unfamiliar = load(contrast, parcel, name="induced")
+plot_tfr(famous_vs_unfamiliar, p_famous_vs_unfamiliar, "plots/famous_vs_unfamiliar_induced.png")
 
-if plot_button:
-    contrast = 3
-    parcel = 9
+#%% Plot button press response
 
-    # Total power response
-    button, p_button = load(contrast, parcel, name="total")
-    plot_tfr(button, p_button, "plots/button_total.png")
+contrast = 3
+parcel = 9
 
-    # Evoked response
-    button, p_button = load(contrast, parcel, name="evoked")
-    plot_tfr(button, p_button, "plots/button_evoked.png")
+# Total power response
+button, p_button = load(contrast, parcel, name="total")
+plot_tfr(button, p_button, "plots/button_total.png")
 
-    # Induced response
-    button, p_button = load(contrast, parcel, name="induced")
-    plot_tfr(button, p_button, "plots/button_induced.png")
+# Evoked response
+button, p_button = load(contrast, parcel, name="evoked")
+plot_tfr(button, p_button, "plots/button_evoked.png")
 
+# Induced response
+button, p_button = load(contrast, parcel, name="induced")
+plot_tfr(button, p_button, "plots/button_induced.png")
