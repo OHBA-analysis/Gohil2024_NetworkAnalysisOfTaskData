@@ -13,8 +13,8 @@ def find_events(raw):
         "unfamiliar": [13, 14, 15],
         "scrambled": [17, 18, 19],
         "button": [
-            256, 261, 262, 263, 269, 270, 271, 273, 274, 275,  # left
-            4096, 4101, 4102, 4103, 4109, 4110, 4111, 4114, 4114, 4115,  # right
+            256, 261, 262, 263, 269, 270, 271, 273, 274, 275,
+            4096, 4101, 4102, 4103, 4109, 4110, 4111, 4114, 4114, 4115,
             4352, 4357, 4359, 4365, 4369,
         ],
     }
@@ -42,8 +42,6 @@ for sub in range(1, 20):
         raw = mne.io.read_raw_fif(file, preload=True)
 
         # Standardise
-        #
-        # NOTE: whether or not you standardise makes a difference
         raw.apply_function(standardize, picks="meg")
 
         # Find event timings

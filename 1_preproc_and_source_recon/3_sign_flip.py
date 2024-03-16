@@ -7,8 +7,6 @@ from dask.distributed import Client
 
 from osl import source_recon, utils
 
-source_recon.setup_fsl("/path/to/fsl")
-
 # Directory containing source reconstructed data
 src_dir = "data/src"
 src_files = sorted(glob("{src_dir}/*/parc/parc-raw.fif"))
