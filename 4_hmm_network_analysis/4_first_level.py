@@ -12,11 +12,11 @@ from glob import glob
 def get_best_run():
     best_fe = np.Inf
     for run in range(1, 11):
-        history = pickle.load(open(f"data/hmm/run{run:02d}/model/history.pkl", "rb"))
+        history = pickle.load(open(f"data/hmm_analysis/run{run:02d}/model/history.pkl", "rb"))
         if history["free_energy"] < best_fe:
             best_run = run
             best_fe = history["free_energy"]
-    print("Best run:" best_run)
+    print("Best run:", best_run)
     return best_run
 
 def save_contrasts(name, famous, unfamiliar, scrambled, button):
@@ -27,14 +27,14 @@ def save_contrasts(name, famous, unfamiliar, scrambled, button):
         button,
     ]
     for i, contrast in enumerate(contrasts):
-        filename = f"data/hmm/run{run:02d}/first_level/{name}_contrast_{i}.npy"
+        filename = f"data/hmm_analysis/run{run:02d}/first_level/{name}_contrast_{i}.npy"
         np.save(filename, contrast)
 
 run = get_best_run()
 
-os.makedirs(f"data/hmm/run{run:02d}/first_level", exist_ok=True)
-for file in sorted(glob(f"data/hmm/run{run:02d}/epochs/*-epo.fif")):
-    id = file.split("/")[-1].split("-")[0]
+os.makedirs(f"data/hmm_analysis/run{run:02d}/first_level", exist_ok=True)
+for file in sorted(glob(f"data/hmm_analysis/run{run:02d}/epochs/*_epo.fif")):
+    id = file.split("/")[-1].replace("_epo.fif", "")
     print(id)
 
     # Load data
@@ -54,4 +54,4 @@ for file in sorted(glob(f"data/hmm/run{run:02d}/epochs/*-epo.fif")):
     save_contrasts(id, famous, unfamiliar, scrambled, button)
 
 # Save time axis
-np.save(f"data/hmm/run{run:02d}/first_level/t.npy", epochs.times)
+np.save(f"data/hmm_analysis/run{run:02d}/first_level/t.npy", epochs.times)
