@@ -13,7 +13,7 @@ from osl_dynamics import run_pipeline
 
 config = """
     load_data:
-        inputs: data/src/npy
+        inputs: data/preproc/npy
         kwargs:{n_jobs: 8}
         prepare:
             tde_pca: {n_embeddings: 15, n_pca_components: 80}
@@ -28,4 +28,4 @@ config = """
         save_inf_params: False
 """
 
-run_pipeline(config, output_dir=f"data/dynemo/run{run:02d}")
+run_pipeline(config, output_dir=f"data/dynemo_analysis/run{run:02d}")

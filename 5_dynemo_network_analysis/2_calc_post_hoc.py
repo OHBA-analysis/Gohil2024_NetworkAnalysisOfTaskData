@@ -10,7 +10,7 @@ from osl_dynamics import run_pipeline
 def get_best_run():
     best_fe = np.Inf
     for run in range(1, 11):
-        history = pickle.load(open(f"data/dynemo/run{run:02d}/model/history.pkl", "rb"))
+        history = pickle.load(open(f"data/dynemo_analysis/run{run:02d}/model/history.pkl", "rb"))
         if history["free_energy"] < best_fe:
             best_run = run
             best_fe = history["free_energy"]
@@ -19,7 +19,7 @@ def get_best_run():
 
 config = """
     load_data:
-        inputs: data/src/npy
+        inputs: data/preproc/npy
         kwargs:
             sampling_frequency: 250
             mask_file: MNI152_T1_8mm_brain.nii.gz
@@ -40,4 +40,4 @@ config = """
 
 run = get_best_run()
 
-run_pipeline(config, output_dir=f"data/dynemo/run{run:02d}")
+run_pipeline(config, output_dir=f"data/dynemo_analysis/run{run:02d}")
