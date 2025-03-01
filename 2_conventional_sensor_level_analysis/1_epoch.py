@@ -33,7 +33,7 @@ files = []
 for sub in range(1, 20):
     for run in range(1, 7):
         # Load preprocessed data
-        file = "data/preproc/sub{sub:02d}/run_{run:02d}_sss/run_{run:02d}_sss_preproc_raw.fif".format(sub=sub, run=run)
+        file = "data/preproc/sub-{sub:02d}_run-{run:02d}/sub-{sub:02d}_run-{run:02d}_preproc-raw.fif".format(sub=sub, run=run)
         raw = mne.io.read_raw_fif(file, preload=True)
 
         # Standardise
@@ -44,5 +44,5 @@ for sub in range(1, 20):
 
         # Epoch and save
         epochs = mne.Epochs(raw, events, event_ids, tmin=-0.1, tmax=1)
-        filename = "data/sensor_analysis/epochs/sub{0:02d}_run{1:02d}-epo.fif".format(sub, run)
+        filename = "data/sensor_analysis/epochs/sub-{0:02d}_run-{1:02d}_epo.fif".format(sub, run)
         epochs.save(filename, overwrite=True)
