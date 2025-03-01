@@ -30,7 +30,7 @@ def standardize(data):
     return data
 
 os.makedirs("data/parcel_analysis/epochs", exist_ok=True)
-for file in sorted(glob("data/src/*/sflip_parc-raw.fif")):
+for file in sorted(glob("data/preproc/*/*_sflip_lcmv-parc-raw.fif")):
     id = file.split("/")[-2]
 
     # Load source data
@@ -44,5 +44,5 @@ for file in sorted(glob("data/src/*/sflip_parc-raw.fif")):
 
     # Epoch and save
     epochs = mne.Epochs(raw, events, event_ids, tmin=-0.1, tmax=1)
-    filename = f"data/parcel_analysis/epochs/{id}-epo.fif"
+    filename = f"data/parcel_analysis/epochs/{id}_epo.fif"
     epochs.save(filename, overwrite=True)

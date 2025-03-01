@@ -2,7 +2,7 @@
 
 Example scripts for reproducing the results in [Gohil et al. (2024)](https://www.biorxiv.org/content/10.1101/2024.01.12.567026v2). If you find these scripts useful, please cite:
 
-> Gohil, C., et al. "Dynamic Network Analysis of Electrophysiological Task Data." _bioRxiv_ (2024): 2024-01.
+> Gohil, C., Kohl, O., Huang, R., van Es, M. W., Parker Jones, O., Hunt, L. T., ... & Woolrich, M. W. (2024). Dynamic network analysis of electrophysiological task data. Imaging Neuroscience, 2, 1-19.
 
 ## Pipeline Overview
 
@@ -18,7 +18,7 @@ Example scripts for reproducing the results in [Gohil et al. (2024)](https://www
 
 ## Prerequisites
 
-To run these scripts you need to install [OSL](https://github.com/OHBA-analysis/osl) and [osl-dynamics](https://github.com/OHBA-analysis/osl-dynamics). See the instructions [here](https://osl.readthedocs.io/en/latest/install.html) to install these packages.
+To run these scripts you need to install [osl-ephys](https://github.com/OHBA-analysis/osl-ephys) and [osl-dynamics](https://github.com/OHBA-analysis/osl-dynamics). See the instructions [here](https://osl-ephys.readthedocs.io/en/latest/install.html) to install these packages.
 
 ## Getting help
 

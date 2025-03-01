@@ -13,21 +13,21 @@ from osl_dynamics.inference import modes
 def get_best_run():
     best_fe = np.Inf
     for run in range(1, 11):
-        history = pickle.load(open(f"data/hmm/run{run:02d}/model/history.pkl", "rb"))
+        history = pickle.load(open(f"data/hmm_analysis/run{run:02d}/model/history.pkl", "rb"))
         if history["free_energy"] < best_fe:
             best_run = run
             best_fe = history["free_energy"]
-    print("Best run:" best_run)
+    print("Best run:", best_run)
     return best_run
 
 run = get_best_run()
 
-# Calculate state time course (Viterbi path) from state probabilities
-alp = pickle.load(open(f"data/hmm/run{run:02d}/inf_params/alp.pkl", "rb"))
+# Calculate state time course
+alp = pickle.load(open(f"data/hmm_analysis/run{run:02d}/inf_params/alp.pkl", "rb"))
 stc = modes.argmax_time_courses(alp)
 
 # Parcel data files
-parc_files = sorted(glob("data/src/*/sflip_parc-raw.fif"))
+parc_files = sorted(glob("data/preproc/*/*_sflip_lcmv-parc-raw.fif"))
 
 # Event IDs
 new_event_ids = {"famous": 1, "unfamiliar": 2, "scrambled": 3, "button": 4}
@@ -42,7 +42,7 @@ old_event_ids = {
     ],
 }
 
-os.makedirs(f"data/hmm/run{run:02d}/epochs", exist_ok=True)
+os.makedirs(f"data/hmm_analysis/run{run:02d}/epochs", exist_ok=True)
 for s, p in zip(stc, parc_files):
 
     # Create an MNE raw object
@@ -64,5 +64,5 @@ for s, p in zip(stc, parc_files):
 
     # Save
     id = p.split("/")[-2]
-    filename = f"data/hmm/run{run:02d}/epochs/{id}-epo.fif"
+    filename = f"data/hmm_analysis/run{run:02d}/epochs/{id}_epo.fif"
     epochs.save(filename, overwrite=True)

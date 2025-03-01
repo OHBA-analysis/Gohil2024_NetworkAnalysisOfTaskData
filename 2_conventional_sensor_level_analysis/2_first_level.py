@@ -33,8 +33,8 @@ def save_contrasts(name, famous, unfamiliar, scrambled, button):
         np.save(filename, contrast)
 
 os.makedirs("data/sensor_analysis/first_level", exist_ok=True)
-for file in sorted(glob("data/sensor_analysis/epochs/*-epo.fif")):
-    id = file.split("/")[-1].split("-")[0]
+for file in sorted(glob("data/sensor_analysis/epochs/*_epo.fif")):
+    id = file.split("/")[-1].replace("_epo.fif", "")
     print(id)
 
     # Load data

@@ -10,7 +10,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 os.makedirs("plots", exist_ok=True)
 
-preproc_file = "data/preproc/sub{sub:02d}/run_{run:02d}_sss/run_{run:02d}_sss_preproc_raw.fif"
+preproc_file = "data/preproc/sub-{sub:02d}_run-{run:02d}/sub-{sub:02d}_run-{run:02d}_preproc-raw.fif"
 
 t = np.load("data/sensor_analysis/first_level/t.npy")
 f = np.load("data/sensor_analysis/first_level/f.npy")
