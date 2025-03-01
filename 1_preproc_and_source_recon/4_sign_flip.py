@@ -5,27 +5,27 @@
 from glob import glob
 from dask.distributed import Client
 
-from osl import source_recon, utils
-
-# Directory containing source reconstructed data
-src_dir = "data/src"
-src_files = sorted(glob("{src_dir}/*/parc/parc-raw.fif"))
+from osl_ephys import source_recon, utils
 
 if __name__ == "__main__":
     utils.logger.set_up(level="INFO")
+    client = Client(n_workers=8, threads_per_worker=1)
 
-    # Get subjects
+    outdir = "data/preproc"
+    files = sorted(glob(f"{outdir}/*/parc/lcmv-parc-raw.fif"))
+
     subjects = []
-    for path in src_files:
+    for path in files:
         subject = path.split("/")[-3]
         subjects.append(subject)
 
-    # Find a good template subject to match others to
     template = source_recon.find_template_subject(
-        src_dir, subjects, n_embeddings=15, standardize=True
+        outdir,
+        subjects,
+        n_embeddings=15,
+        standardize=True,
     )
 
-    # Settings
     config = f"""
         source_recon:
         - fix_sign_ambiguity:
@@ -37,8 +37,9 @@ if __name__ == "__main__":
             max_flips: 20
     """
 
-    # Setup parallel processing
-    client = Client(n_workers=16, threads_per_worker=1)
-
-    # Run sign flipping
-    source_recon.run_src_batch(config, src_dir, subjects, dask_client=True)
+    source_recon.run_src_batch(
+        config,
+        subjects=subjects,
+        outdir=outdir,
+        dask_client=True,
+    )

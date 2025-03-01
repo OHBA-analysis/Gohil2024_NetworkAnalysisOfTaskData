@@ -1,16 +1,15 @@
 
-"""Source reconstruction.
+"""Coregistration.
 
-This includes: coregistration, beamforming and parcellation.
 """
 
 import numpy as np
 from dask.distributed import Client
 
-from osl import source_recon, utils
+from osl_ephys import source_recon, utils
 
-def fix_headshape_points(src_dir, subject, preproc_file, smri_file, epoch_file):
-    filenames = source_recon.rhino.get_coreg_filenames(src_dir, subject)
+def fix_headshape_points(outdir, subject):
+    filenames = source_recon.rhino.get_coreg_filenames(outdir, subject)
 
     # Load saved headshape and nasion files
     hs = np.loadtxt(filenames["polhemus_headshape_file"])
@@ -28,45 +27,34 @@ def fix_headshape_points(src_dir, subject, preproc_file, smri_file, epoch_file):
 
 if __name__ == "__main__":
     utils.logger.set_up(level="INFO")
-    client = Client(n_workers=16, threads_per_worker=1)
+    client = Client(n_workers=8, threads_per_worker=1)
 
     config = """
         source_recon:
-        - extract_fiducials_from_fif: {}
+        - extract_polhemus_from_info: {}
         - fix_headshape_points: {}
         - compute_surfaces:
             include_nose: False
         - coregister:
             use_nose: False
             use_headshape: True
-        - forward_model:
-            model: Single Layer
-        - beamform_and_parcellate:
-            freq_range: [1, 45]
-            chantypes: [mag, grad]
-            rank: {meg: 60}
-            parcellation_file: fmri_d100_parcellation_with_PCC_reduced_2mm_ss5mm_ds8mm.nii.gz
     """
 
-    raw_dir = "data/ds117"
-    src_dir = "data/src"
+    rawdir = "data/ds117"
+    outdir = "data/preproc"
 
     subjects = []
-    preproc_files = []
     smri_files = []
     for sub in range(1, 20):
-        preproc_dir = f"data/preproc/sub{sub:02d}"
         for run in range(1, 7):
-            subjects.append(f"sub{sub:02d}_run{run:02d}")
-            preproc_files.append(f"{preproc_dir}/run_{run:02d}_sss/run_{run:02d}_sss_preproc_raw.fif")
-            smri_files.append(f"{raw_dir}/sub{sub:03d}/anatomy/highres001.nii.gz")
+            smri_files.append(f"{rawdir}/sub{sub:03d}/anatomy/highres001.nii.gz")
+            subjects.append(f"sub-{sub:02d}_run-{run:02d}")
 
     source_recon.run_src_batch(
         config,
-        src_dir=src_dir,
         subjects=subjects,
-        preproc_files=preproc_files,
         smri_files=smri_files,
+        outdir=outdir,
         extra_funcs=[fix_headshape_points],
         dask_client=True,
     )

@@ -4,11 +4,11 @@
 
 from dask.distributed import Client
 
-from osl import preprocessing, utils
+from osl_ephys import preprocessing, utils
 
 if __name__ == "__main__":
     utils.logger.set_up(level="INFO")
-    client = Client(n_workers=6, threads_per_worker=1)
+    client = Client(n_workers=8, threads_per_worker=1)
 
     config = """
         preproc:
@@ -25,16 +25,21 @@ if __name__ == "__main__":
         - interpolate_bads: {}
     """
 
-    raw_dir = "data/ds117"
+    rawdir = "data/ds117"
+    outdir = "data/preproc"
+
+    files = []
+    subjects = []
     for sub in range(1, 20):
-        inputs = []
         for run in range(1, 7):
-            inputs.append(f"{raw_dir}/sub{sub:03d}/MEG/run_{run:02d}_sss.fif")
-        preproc_dir = f"data/preproc/sub{sub:02d}"
-        preprocessing.run_proc_batch(
-            config,
-            inputs,
-            outdir=preproc_dir,
-            overwrite=True,
-            dask_client=True,
-        )
+            files.append(f"{rawdir}/sub{sub:03d}/MEG/run_{run:02d}_sss.fif")
+            subjects.append(f"sub-{sub:02d}_run-{run:02d}")
+
+    preprocessing.run_proc_batch(
+        config,
+        files,
+        subjects,
+        outdir=outdir,
+        overwrite=True,
+        dask_client=True,
+    )
