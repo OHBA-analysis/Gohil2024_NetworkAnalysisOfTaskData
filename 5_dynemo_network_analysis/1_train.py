@@ -1,6 +1,4 @@
-"""Train DyNeMo.
-
-"""
+"""Train DyNeMo."""
 
 from sys import argv
 

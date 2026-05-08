@@ -1,6 +1,4 @@
-"""Calculate post-hoc spectra and networks.
-
-"""
+"""Calculate post-hoc spectra and networks."""
 
 from osl_dynamics import run_pipeline
 

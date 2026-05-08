@@ -1,6 +1,4 @@
-"""Group-level analysis.
-
-"""
+"""Group-level analysis."""
 
 import os
 import numpy as np

@@ -1,6 +1,4 @@
-"""Epoch mode time courses.
-
-"""
+"""Epoch mode time courses."""
 
 import os
 import mne

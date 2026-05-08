@@ -1,6 +1,4 @@
-"""Epoch sensor data.
-
-"""
+"""Epoch sensor data."""
 
 import os
 import mne

@@ -1,6 +1,4 @@
-"""Train TDE-HMM.
-
-"""
+"""Train TDE-HMM."""
 
 from sys import argv
 

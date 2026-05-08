@@ -1,6 +1,4 @@
-"""First-level analysis.
-
-"""
+"""First-level analysis."""
 
 import os
 import mne

@@ -1,6 +1,4 @@
-"""Coregistration.
-
-"""
+"""Coregistration."""
 
 from pathlib import Path
 from osl_dynamics.meeg import parallel, rhino

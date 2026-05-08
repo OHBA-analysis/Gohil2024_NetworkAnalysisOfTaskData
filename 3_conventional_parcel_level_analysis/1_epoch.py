@@ -1,6 +1,4 @@
-"""Epoch parcel data.
-
-"""
+"""Epoch parcel data."""
 
 import os
 import mne

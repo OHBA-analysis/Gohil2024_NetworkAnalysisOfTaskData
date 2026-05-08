@@ -1,6 +1,4 @@
-"""Surface extraction from structural MRI.
-
-"""
+"""Surface extraction from structural MRI."""
 
 from pathlib import Path
 from osl_dynamics.meeg import parallel, rhino

@@ -1,6 +1,4 @@
-"""Plot results.
-
-"""
+"""Plot results."""
 
 import os
 import mne
