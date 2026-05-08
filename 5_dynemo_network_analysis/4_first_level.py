@@ -9,7 +9,7 @@ import numpy as np
 from glob import glob
 
 def get_best_run():
-    best_fe = np.Inf
+    best_fe = np.inf
     for run in range(1, 11):
         history = pickle.load(open(f"data/dynemo_analysis/run{run:02d}/model/history.pkl", "rb"))
         if history["free_energy"] < best_fe:
@@ -32,8 +32,8 @@ def save_contrasts(name, famous, unfamiliar, scrambled, button):
 run = get_best_run()
 
 os.makedirs(f"data/dynemo_analysis/run{run:02d}/first_level", exist_ok=True)
-for file in sorted(glob(f"data/dynemo_analysis/run{run:02d}/epochs/*-epo.fif")):
-    id = file.split("/")[-1].split("-")[0]
+for file in sorted(glob(f"data/dynemo_analysis/run{run:02d}/epochs/*_epo.fif")):
+    id = file.split("/")[-1].replace("_epo.fif", "")
     print(id)
 
     # Load data

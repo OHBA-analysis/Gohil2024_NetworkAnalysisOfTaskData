@@ -11,7 +11,7 @@ from osl_dynamics.inference import modes
 from osl_dynamics.utils import plotting
 
 def get_best_run():
-    best_fe = np.Inf
+    best_fe = np.inf
     for run in range(1, 11):
         history = pickle.load(open(f"data/dynemo_analysis/run{run:02d}/model/history.pkl", "rb"))
         if history["free_energy"] < best_fe:

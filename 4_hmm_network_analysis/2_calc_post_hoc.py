@@ -8,7 +8,7 @@ import numpy as np
 from osl_dynamics import run_pipeline
 
 def get_best_run():
-    best_fe = np.Inf
+    best_fe = np.inf
     for run in range(1, 11):
         history = pickle.load(open(f"data/hmm_analysis/run{run:02d}/model/history.pkl", "rb"))
         if history["free_energy"] < best_fe:
