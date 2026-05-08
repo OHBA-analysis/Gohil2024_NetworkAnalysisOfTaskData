@@ -14,7 +14,7 @@ from osl_dynamics.utils.filenames import OSLFilenames
 # ----------------------------------------------------------------------------
 output_dir = Path("data/derivatives")
 plots_dir = Path("plots")
-log_dir = Path("logs/4_source_recon")
+log_dir = Path("logs/4_source_recon_and_parc")
 
 sessions = [
     {
