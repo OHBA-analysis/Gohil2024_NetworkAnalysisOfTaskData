@@ -1,7 +1,7 @@
 Preprocessing, Source Reconstruction and Parcellation
 -----------------------------------------------------
 
-Example scripts for preprocessing, source reconstructing and parcellating the [Wakeman-Henson dataset](https://openneuro.org/datasets/ds000117/versions/1.0.5) using [osl-dynamics](https://github.com/OHBA-analysis/osl-dynamics).
+Example scripts for preprocessing, source reconstructing and parcellating the [Wakeman-Henson dataset](https://openfmri.org/dataset/ds000117/) using [osl-dynamics](https://github.com/OHBA-analysis/osl-dynamics).
 
 Scripts:
 
