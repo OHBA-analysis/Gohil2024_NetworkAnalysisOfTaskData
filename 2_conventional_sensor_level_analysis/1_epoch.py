@@ -33,7 +33,7 @@ files = []
 for sub in range(1, 20):
     for run in range(1, 7):
         # Load preprocessed data
-        file = "data/preproc/sub-{sub:02d}_run-{run:02d}/sub-{sub:02d}_run-{run:02d}_preproc-raw.fif".format(sub=sub, run=run)
+        file = "data/derivatives/preprocessed/sub-{sub:02d}_run-{run:02d}_preproc-raw.fif".format(sub=sub, run=run)
         raw = mne.io.read_raw_fif(file, preload=True)
 
         # Standardise

@@ -28,7 +28,7 @@ covs = np.load(f"data/dynemo_analysis/run{run:02d}/inf_params/covs.npy")
 alp = modes.reweight_alphas(alp, covs)
 
 # Parcel data files
-parc_files = sorted(glob("data/preproc/*/*_sflip_lcmv-parc-raw.fif"))
+parc_files = sorted(glob("data/derivatives/osl/*/sflip-lcmv-parc-raw.fif"))
 
 # Event IDs
 new_event_ids = {"famous": 1, "unfamiliar": 2, "scrambled": 3, "button": 4}

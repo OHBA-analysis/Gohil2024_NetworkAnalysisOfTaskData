@@ -30,7 +30,7 @@ def standardize(data):
     return data
 
 os.makedirs("data/parcel_analysis/epochs", exist_ok=True)
-for file in sorted(glob("data/preproc/*/*_sflip_lcmv-parc-raw.fif")):
+for file in sorted(glob("data/derivatives/osl/*/sflip-lcmv-parc-raw.fif")):
     id = file.split("/")[-2]
 
     # Load source data
