@@ -12,7 +12,9 @@ os.makedirs("plots", exist_ok=True)
 
 preproc_file = "data/derivatives/preprocessed/sub-{sub:02d}_run-{run:02d}_preproc-raw.fif"
 
-t = np.load("data/sensor_analysis/first_level/t.npy")
+# Shift the time axis to correct for the trigger-to-stimulus projector delay
+# in the Wakeman-Henson recording setup
+t = np.load("data/sensor_analysis/first_level/t.npy") - 34e-3
 f = np.load("data/sensor_analysis/first_level/f.npy")
 
 def load(contrast, sensor="all", name="total"):

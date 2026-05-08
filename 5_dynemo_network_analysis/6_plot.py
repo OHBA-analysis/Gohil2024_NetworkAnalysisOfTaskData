@@ -18,7 +18,9 @@ run = get_best_run()
 
 contrasts = ["visual", "faces_vs_scrambled", "famous_vs_unfamiliar", "button"]
 
-t = np.load(f"data/dynemo_analysis/run{run:02d}/first_level/t.npy")
+# Shift the time axis to correct for the trigger-to-stimulus projector delay
+# in the Wakeman-Henson recording setup
+t = np.load(f"data/dynemo_analysis/run{run:02d}/first_level/t.npy") - 34e-3
 
 #%% Plot mode time courses
 
