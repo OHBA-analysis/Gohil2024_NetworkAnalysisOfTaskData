@@ -1,6 +1,4 @@
-"""Train DyNeMo.
-
-"""
+"""Train DyNeMo."""
 
 from sys import argv
 
@@ -13,8 +11,11 @@ from osl_dynamics import run_pipeline
 
 config = """
     load_data:
-        inputs: data/preproc/npy
-        kwargs:{n_jobs: 8}
+        inputs: data/derivatives/osl/*/sflip-lcmv-parc-raw.fif
+        kwargs:
+            picks: misc
+            reject_by_annotation: omit
+            n_jobs: 8
         prepare:
             tde_pca: {n_embeddings: 15, n_pca_components: 80}
             standardize: {}

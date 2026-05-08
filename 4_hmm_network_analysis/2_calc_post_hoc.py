@@ -1,26 +1,15 @@
-"""Calculate post-hoc spectra and networks.
-
-"""
-
-import pickle
-import numpy as np
+"""Calculate post-hoc spectra and networks."""
 
 from osl_dynamics import run_pipeline
 
-def get_best_run():
-    best_fe = np.Inf
-    for run in range(1, 11):
-        history = pickle.load(open(f"data/hmm_analysis/run{run:02d}/model/history.pkl", "rb"))
-        if history["free_energy"] < best_fe:
-            best_run = run
-            best_fe = history["free_energy"]
-    print("Best run:", best_run)
-    return best_run
+from utils import get_best_run
 
 config = """
     load_data:
-        inputs: data/preproc/npy
+        inputs: data/derivatives/osl/*/sflip-lcmv-parc-raw.fif
         kwargs:
+            picks: misc
+            reject_by_annotation: omit
             sampling_frequency: 250
             mask_file: MNI152_T1_8mm_brain.nii.gz
             parcellation_file: fmri_d100_parcellation_with_PCC_reduced_2mm_ss5mm_ds8mm.nii.gz

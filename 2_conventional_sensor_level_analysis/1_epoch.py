@@ -1,6 +1,4 @@
-"""Epoch sensor data.
-
-"""
+"""Epoch sensor data."""
 
 import os
 import mne
@@ -14,7 +12,7 @@ def find_events(raw):
         "scrambled": [17, 18, 19],
         "button": [
             256, 261, 262, 263, 269, 270, 271, 273, 274, 275,
-            4096, 4101, 4102, 4103, 4109, 4110, 4111, 4114, 4114, 4115,
+            4096, 4101, 4102, 4103, 4109, 4110, 4111, 4113, 4114, 4115,
             4352, 4357, 4359, 4365, 4369,
         ],
     }
@@ -33,7 +31,7 @@ files = []
 for sub in range(1, 20):
     for run in range(1, 7):
         # Load preprocessed data
-        file = "data/preproc/sub-{sub:02d}_run-{run:02d}/sub-{sub:02d}_run-{run:02d}_preproc-raw.fif".format(sub=sub, run=run)
+        file = "data/derivatives/preprocessed/sub-{sub:02d}_run-{run:02d}_preproc-raw.fif".format(sub=sub, run=run)
         raw = mne.io.read_raw_fif(file, preload=True)
 
         # Standardise

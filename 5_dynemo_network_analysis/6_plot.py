@@ -1,24 +1,13 @@
-"""Plot results.
-
-"""
+"""Plot results."""
 
 import os
 import pickle
 import numpy as np
-import matplotlib.pyplot as plt
 
 from osl_dynamics.inference import modes
 from osl_dynamics.utils import plotting
 
-def get_best_run():
-    best_fe = np.Inf
-    for run in range(1, 11):
-        history = pickle.load(open(f"data/dynemo_analysis/run{run:02d}/model/history.pkl", "rb"))
-        if history["free_energy"] < best_fe:
-            best_run = run
-            best_fe = history["free_energy"]
-    print("Best run:", best_run)
-    return best_run
+from utils import get_best_run
 
 os.makedirs("plots", exist_ok=True)
 
@@ -26,7 +15,9 @@ run = get_best_run()
 
 contrasts = ["visual", "faces_vs_scrambled", "famous_vs_unfamiliar", "button"]
 
-t = np.load(f"data/dynemo_analysis/run{run:02d}/first_level/t.npy")
+# Shift the time axis to correct for the trigger-to-stimulus projector delay
+# in the Wakeman-Henson recording setup
+t = np.load(f"data/dynemo_analysis/run{run:02d}/first_level/t.npy") - 34e-3
 
 #%% Plot mode time courses
 

@@ -18,7 +18,7 @@ Example scripts for reproducing the results in [Gohil et al. (2024)](https://dir
 
 ## Prerequisites
 
-To run these scripts you need to install [osl-ephys](https://github.com/OHBA-analysis/osl-ephys) and [osl-dynamics](https://github.com/OHBA-analysis/osl-dynamics).
+To run these scripts you need to install [osl-dynamics](https://github.com/OHBA-analysis/osl-dynamics) and [FSL](https://fsl.fmrib.ox.ac.uk/fsl/docs/).
 
 ## Getting help
 

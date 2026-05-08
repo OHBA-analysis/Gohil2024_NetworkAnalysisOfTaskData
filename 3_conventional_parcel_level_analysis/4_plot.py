@@ -1,6 +1,4 @@
-"""Plot results.
-
-"""
+"""Plot results."""
 
 import os
 import numpy as np
@@ -11,7 +9,9 @@ from osl_dynamics.analysis import power
 
 os.makedirs("plots", exist_ok=True)
 
-t = np.load("data/parcel_analysis/first_level/t.npy")
+# Shift the time axis to correct for the trigger-to-stimulus projector delay
+# in the Wakeman-Henson recording setup
+t = np.load("data/parcel_analysis/first_level/t.npy") - 34e-3
 f = np.load("data/parcel_analysis/first_level/f.npy")
 
 def load(contrast, parcel="all", name="total"):
