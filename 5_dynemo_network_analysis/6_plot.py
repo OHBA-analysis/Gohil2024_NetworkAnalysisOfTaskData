@@ -5,7 +5,6 @@
 import os
 import pickle
 import numpy as np
-import matplotlib.pyplot as plt
 
 from osl_dynamics.inference import modes
 from osl_dynamics.utils import plotting

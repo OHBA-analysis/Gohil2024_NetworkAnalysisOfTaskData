@@ -1,4 +1,3 @@
-
 """First-level analysis.
 
 """

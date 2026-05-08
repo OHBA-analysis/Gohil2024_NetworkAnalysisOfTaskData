@@ -5,7 +5,6 @@
 import os
 import mne
 import pickle
-import numpy as np
 from glob import glob
 
 from osl_dynamics.inference import modes
