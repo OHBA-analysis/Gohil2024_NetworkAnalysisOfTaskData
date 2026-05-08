@@ -10,15 +10,7 @@ from glob import glob
 
 from osl_dynamics.inference import modes
 
-def get_best_run():
-    best_fe = np.inf
-    for run in range(1, 11):
-        history = pickle.load(open(f"data/hmm_analysis/run{run:02d}/model/history.pkl", "rb"))
-        if history["free_energy"] < best_fe:
-            best_run = run
-            best_fe = history["free_energy"]
-    print("Best run:", best_run)
-    return best_run
+from utils import get_best_run
 
 run = get_best_run()
 
@@ -60,6 +52,7 @@ for s, p in zip(stc, parc_files):
         new_event_ids,
         tmin=-0.1,
         tmax=1.0,
+        baseline=None,
     )
 
     # Save
