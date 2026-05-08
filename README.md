@@ -18,7 +18,7 @@ Example scripts for reproducing the results in [Gohil et al. (2024)](https://dir
 
 ## Prerequisites
 
-To run these scripts you need to install [osl-ephys](https://github.com/OHBA-analysis/osl-ephys) and [osl-dynamics](https://github.com/OHBA-analysis/osl-dynamics).
+To run these scripts you need to install [osl-dynamics](https://github.com/OHBA-analysis/osl-dynamics). The preprocessing and source-reconstruction steps use the `osl_dynamics.meeg` subpackage; HMM and DyNeMo training use the inference modules.
 
 ## Getting help
 
