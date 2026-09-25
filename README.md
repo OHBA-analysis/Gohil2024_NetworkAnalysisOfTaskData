@@ -22,4 +22,4 @@ To run these scripts you need to install [osl-dynamics](https://github.com/OHBA-
 
 ## Getting help
 
-You can email chetan.gohil@psych.ox.ac.uk if you run into errors, need help or spot any typos. Alternatively, please open an issue on this repository.
+You can email chetan.gohil@ndcn.ox.ac.uk if you run into errors, need help or spot any typos. Alternatively, please open an issue on this repository.
